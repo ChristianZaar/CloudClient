@@ -1,6 +1,8 @@
 package com.asome.cloudclient;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.transition.Slide;
@@ -61,18 +63,10 @@ public class LoginFragment extends Fragment {
         return v;
     }
 
-    private void saveCredentials(){
-
-    }
-
-
-    private void btnLock(){
-        mLoginBtn.setEnabled(!mLoginBtn.isEnabled());
-        System.out.println(mLoginBtn.isEnabled());
-    }
-
     private void makeToast(String msg){
-        Toast.makeText(getContext() , msg, Toast.LENGTH_LONG).show();
+        Activity a = getActivity();
+        if(a != null )
+            Toast.makeText(a, msg, Toast.LENGTH_LONG).show();
     }
 
     private void setListeners(){
@@ -80,7 +74,11 @@ public class LoginFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (checkCredentials()){
-                    makeToast("Todo login action");
+                    makeToast(TAG + " Todo login action");
+                    Intent intent = MenuActivity.newIntent(getActivity());
+                    //Clearing stack
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
                 }
             }
         });
@@ -119,7 +117,6 @@ public class LoginFragment extends Fragment {
                         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(TAG);
                         transaction.replace(R.id.fragment_container, f);
                         transaction.commit();
-
                 }
                 return false;
             }

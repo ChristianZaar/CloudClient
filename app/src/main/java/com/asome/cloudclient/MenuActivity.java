@@ -144,27 +144,12 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(intent);
                 f = null;//Not implemented
                 break;
-//            case R.id.nav_settings:
-//                tag = SettingsFragment.TAG;
-//                f = fm.findFragmentByTag(SettingsFragment.TAG);
-//                if (f == null)
-//                    f = new SettingsFragment();
-//                break;
-//            case R.id.nav_viewHouses:
-//                //f = new ViewHouseFragment();
-//                tag = ViewHouseFragment.TAG;
-//                f = fm.findFragmentByTag(ViewHouseFragment.TAG);
-//                if (f == null)
-//                    f = new ViewHouseFragment();
-//                break;
-//            case R.id.nav_viewAlarms:
-//                //f = new ViewHouseFragment();
-//                tag = AlarmListFragment.TAG;
-//                f = fm.findFragmentByTag(AlarmListFragment.TAG);
-//                if (f == null)
-//                    f = new AlarmListFragment();
-//                ((AlarmListFragment)f).setPar(mSession);
-//                break;
+            case R.id.nav_settings:
+                tag = SettingsFragment.TAG;
+                f = fm.findFragmentByTag(SettingsFragment.TAG);
+                if (f == null)
+                    f = new SettingsFragment();
+                break;
         }
 
         if (f != null) {

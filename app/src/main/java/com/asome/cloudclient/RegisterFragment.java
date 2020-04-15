@@ -1,5 +1,6 @@
 package com.asome.cloudclient;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -92,7 +93,9 @@ public class RegisterFragment extends Fragment {
         });
     }
     private void makeToast(String msg){
-        Toast.makeText(getContext() , msg, Toast.LENGTH_LONG).show();
+        Activity a = getActivity();
+        if(a != null )
+            Toast.makeText(a, msg, Toast.LENGTH_LONG).show();
     }
 
     private boolean checkRegistration() {

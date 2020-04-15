@@ -28,6 +28,7 @@
     <string name="help">Help</string>
     <string name="placeholder">Place holder</string>
 
+    <string name="upload_to_cloud">Upload to cloud</string>
 
     <string name="help_main">If you ever find yourself in doubt what to do next on every page you have a helpbutton in
     the top right corner press this and you will receive guidelines on how to interact with the application.</string>
