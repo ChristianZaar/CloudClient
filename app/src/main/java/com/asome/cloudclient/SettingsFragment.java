@@ -1,9 +1,11 @@
 package com.asome.cloudclient;
+import android.Manifest;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,7 +18,11 @@ import android.widget.Switch;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+
+import com.google.android.material.snackbar.Snackbar;
+
 import java.util.Iterator;
 import java.util.List;
 import static android.content.Context.ACTIVITY_SERVICE;
@@ -24,16 +30,8 @@ import static android.content.Context.ACTIVITY_SERVICE;
 public class SettingsFragment extends Fragment {
 
     public static final String TAG ="SettingsFragment";
-    private String mHousePassword;
-    private int mHouseID;
-    private int mDeviceID;
+    private final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
 
-    //UI
-    private Button mAccessHouseButton;
-    private Button mDeleteDeviceButton;
-    private EditText mHousePasswordET;
-    private EditText mHouseIdET;
-    private EditText mDeviceIdET;
     private Switch mNotifyAlarms;
 
     @Override
@@ -58,30 +56,76 @@ public class SettingsFragment extends Fragment {
     }
 
     public void setListeners(){
+
         mNotifyAlarms.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 SharedPreferences prefs = MyApplication.getAppContext().getSharedPreferences(
                         MyApplication.TAG, Context.MODE_PRIVATE);
                 if(b){
-                    prefs.edit().putBoolean(MyApplication.UpdateService, true).apply();
-                    if(!isServiceRunning(UploadService.class.getName())){
-                        Intent i = new Intent(MyApplication.getAppContext(), UploadService.class);
-                        MyApplication.getAppContext().startService(i);
-                        makeToast(TAG + "Started upload service");
+                    if (!checkPermissions()) {
+                        requestPermissions();
+                        mNotifyAlarms.setChecked(false);
+                    }
+                    else {
+                        prefs.edit().putBoolean(MyApplication.UpdateService, true).apply();
+                        if (!isServiceRunning(UploadService.class.getName())) {
+                            Intent i = new Intent(MyApplication.getAppContext(), UploadService.class);
+                            MyApplication.getAppContext().startService(i);
+                            makeToast(TAG + "Started upload service");
+                        }
                     }
                 }
                 else{
                     prefs.edit().putBoolean(MyApplication.UpdateService, false).apply();
                     if(isServiceRunning(UploadService.class.getName())){
                         Intent stopIntent = new Intent(MyApplication.getAppContext(), UploadService.class);
-                        stopIntent.setAction(MyApplication.UpdateService);
+                        stopIntent.setAction(MyApplication.CloseUpdateService);
                         MyApplication.getAppContext().startService(stopIntent);
                         makeToast(TAG + "Stopped upload service");
                     }
                 }
             }
         });
+    }
+
+    private boolean checkPermissions() {
+        return  PackageManager.PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(getActivity(),
+                Manifest.permission.ACCESS_FINE_LOCATION);
+    }
+
+    private void requestPermissions() {
+        boolean shouldProvideRationale =
+                ActivityCompat.shouldShowRequestPermissionRationale(getActivity(),
+                        Manifest.permission.ACCESS_FINE_LOCATION);
+
+        // Provide an additional rationale to the user. This would happen if the user denied the
+        // request previously, but didn't check the "Don't ask again" checkbox.
+        if (shouldProvideRationale) {
+            Log.i(TAG, "Displaying permission rationale to provide additional context.");
+            Snackbar.make(
+                    getActivity().findViewById(R.id.drawer_layout),
+                    R.string.permission_rationale,
+                    Snackbar.LENGTH_INDEFINITE)
+                    .setAction(R.string.ok, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            // Request permission
+                            ActivityCompat.requestPermissions(getActivity(),
+                                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                                    REQUEST_PERMISSIONS_REQUEST_CODE);
+                        }
+                    })
+                    .show();
+        } else {
+            Log.i(TAG, "Requesting permission");
+            // Request permission. It's possible this can be auto answered if device policy
+            // sets the permission in a given state or the user denied the permission
+            // previously and checked "Never ask again".
+            ActivityCompat.requestPermissions(getActivity(),
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    REQUEST_PERMISSIONS_REQUEST_CODE);
+        }
     }
 
     private void makeToast(String msg){
