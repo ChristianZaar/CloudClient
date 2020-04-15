@@ -1,3 +1,23 @@
 <resources>
     <string name="app_name">CloudClient</string>
+    <string name="cloud_client">Cloud client</string>
+    <string name="toggle_darkmode">Toggle darkmode</string>
+    <!--Info -->
+    <string name="info">Info</string>
+    <string name="info_title">Welcome</string>
+    <string name="info_info">This app is made as a part of a project in DA376C Development for the cloud.</string>
+    <string name="info_authors">Develpers involved -> Christian, Oskar, Elianus und Filipovic</string>
+
+    <!--Register -->
+    <string name="user_name">Username</string>
+    <string name="email">Email</string>
+    <string name="first_name">First name</string>
+    <string name="last_name">Last name</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm password</string>
+    <string name="register">Register</string>
+
+    <!--Login-->
+    <string name="login">Login</string>
+
 </resources>
