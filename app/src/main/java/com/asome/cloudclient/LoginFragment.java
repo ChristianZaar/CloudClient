@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatDelegate;
@@ -114,7 +113,7 @@ public class LoginFragment extends Fragment {
                         }
                         return true;
                     case R.id.info:
-                        Fragment f = new InfoFragment();
+                        Fragment f = new AboutFragment();
                         f.setEnterTransition(new Slide(Gravity.RIGHT));
                         f.setExitTransition(new Slide(Gravity.LEFT));
                         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(TAG);

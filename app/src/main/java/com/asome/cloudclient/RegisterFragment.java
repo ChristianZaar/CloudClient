@@ -16,7 +16,6 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 public class RegisterFragment extends Fragment {
@@ -80,7 +79,7 @@ public class RegisterFragment extends Fragment {
                         }
                         return true;
                     case R.id.info:
-                        Fragment f = new InfoFragment();
+                        Fragment f = new AboutFragment();
                         f.setEnterTransition(new Slide(Gravity.RIGHT));
                         f.setExitTransition(new Slide(Gravity.LEFT));
                         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction().addToBackStack(TAG);
