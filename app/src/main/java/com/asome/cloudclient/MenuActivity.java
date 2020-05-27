@@ -19,6 +19,12 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.transition.Slide;
+
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 
 public class MenuActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
@@ -28,6 +34,8 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     private final String TAG = "MenuActivity";
     public static final String SESSION = "menuactivity.session";
     public static final String START_WITH_ALARMS = "menuactivity.start_alarms";
+    private GoogleSignInClient mGoogleSignInClient;
+
     public static Intent newIntent(Context packageContext) {
         Intent intent = new Intent(packageContext, MenuActivity.class);
         return intent;
@@ -37,6 +45,11 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         setContentView(R.layout.activity_menu);
         configureToolbar();
@@ -135,13 +148,18 @@ public class MenuActivity extends AppCompatActivity implements NavigationView.On
                     f = new HelpFragment();
                 break;
             case R.id.nav_logout:
-                Intent intent = new Intent(MyApplication.getAppContext(), LoginActivity.class);
-                //Clearing stack
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//                MyApplication.getAppContext()
-//                        .getSharedPreferences(MyApplication.TAG, Context.MODE_PRIVATE)
-//                        .edit().putString(MyApplication.Session, "").apply();
-                startActivity(intent);
+
+                mGoogleSignInClient.signOut()
+                        .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                Intent intent = new Intent(MyApplication.getAppContext(), SignInActivity.class);
+                                //Clearing stack
+                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                                startActivity(intent);
+                            }
+                        });
+
                 f = null;//Not implemented
                 break;
             case R.id.nav_settings:

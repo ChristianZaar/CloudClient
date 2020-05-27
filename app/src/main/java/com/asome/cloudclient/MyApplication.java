@@ -10,11 +10,10 @@ public class MyApplication extends Application {
     public final static String NightModeTag = "com.asome.cloudclient.nightmode";
     public final static String CloseUpdateService = "com.asome.cloudclient.stoprunning";
     public final static String UpdateService = "com.smartest.smarthouseapp.notifyAlarms";
+
     public void onCreate() {
         super.onCreate();
         context = getApplicationContext();
-        SharedPreferences prefs = getAppContext().getSharedPreferences(
-                MyApplication.TAG, Context.MODE_PRIVATE);
     }
 
     public static Context getAppContext() {

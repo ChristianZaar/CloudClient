@@ -21,19 +21,32 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+
 public class LoginFragment extends Fragment {
     private EditText mUserNameEditText;
     private EditText mPassWordEditText;
     private Button mLoginBtn;
     private Button mRegister;
     private Toolbar mToolbar;
+    private static final int RC_SIGN_IN = 9001;
     public static final String TAG ="LoginFragment";
+    private GoogleSignInClient mGoogleSignInClient;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         getActivity().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+
+
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(MyApplication.getAppContext(), gso);
 
         SharedPreferences prefs = MyApplication.getAppContext().getSharedPreferences(
                 MyApplication.TAG, Context.MODE_PRIVATE);
@@ -45,6 +58,15 @@ public class LoginFragment extends Fragment {
         }
 
 
+    }
+
+    @Override
+    public void onStart() {
+
+            GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(MyApplication.getAppContext());
+           // updateUI(account);//navigate to main
+
+        super.onStart();
     }
 
     @Override
