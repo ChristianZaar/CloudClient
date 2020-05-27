@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">CloudClient</string>
-    <string name="cloud_client">Awsome</string>
+    <string name="cloud_client">Awesome</string>
     <string name="toggle_darkmode">Toggle darkmode</string>
     <!--Info -->
     <string name="info">Info</string>
